@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mintdk Official Page</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #00ff7f, #000000);
+            color: #e0ffe0;
+            scroll-behavior: smooth;
+        }
+        header, section {
+            padding: 50px;
+            max-width: 900px;
+            margin: auto;
+            background-color: rgba(0,0,0,0.6);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        h1, h2 {
+            color: #00ff7f;
+        }
+        a {
+            color: #00ff7f;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .socials, .projects {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .project-card, .social-card {
+            background-color: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 10px;
+            flex: 1 1 200px;
+            border: 1px solid #00ff7f;
+        }
+        #creator-mode {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            background-color: rgba(0,0,0,0.7);
+            color: #e0ffe0;
+            border: 1px solid #00ff7f;
+            border-radius: 5px;
+            padding: 5px;
+            resize: vertical;
+        }
+        button {
+            background-color: #00ff7f;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #00cc66;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 data-key="intro-title">Hi, I'm Mintdk</h1>
+    <p data-key="intro-text">I am a 21-year-old university student passionate about programming, currently focused on frontend development.</p>
+</header>
+
+<section>
+    <h2 data-key="about-title">About Me</h2>
+    <p data-key="about-text">I enjoy creating interactive web experiences, learning new frameworks, and experimenting with UI/UX design.</p>
+</section>
+
+<section>
+    <h2 data-key="socials-title">Social Media</h2>
+    <div class="socials">
+        <div class="social-card" data-key="social-discord">Discord: <a href="#">Mintdk#1234</a></div>
+        <div class="social-card" data-key="social-twitter">Twitter: <a href="#">@Mintdk</a></div>
+        <div class="social-card" data-key="social-linkedin">LinkedIn: <a href="#">Mintdk</a></div>
+    </div>
+</section>
+
+<section>
+    <h2 data-key="projects-title">Projects / Work</h2>
+    <div class="projects">
+        <div class="project-card" data-key="project-1">Portfolio Website: <a href="#">View Project</a></div>
+        <div class="project-card" data-key="project-2">Frontend Practice: <a href="#">View Project</a></div>
+    </div>
+</section>
+
+<div id="creator-mode">
+    <input type="password" id="creator-code" placeholder="Enter code">
+    <button onclick="enableEditMode()">Unlock</button>
+</div>
+
+<script>
+const secretCode = "MThRaÑ2";
+
+function enableEditMode() {
+    const input = document.getElementById('creator-code');
+    if(input.value === secretCode){
+        document.querySelectorAll('[data-key]').forEach(el => {
+            const content = el.innerText;
+            if(el.tagName === 'P' || el.tagName === 'DIV'){
+                el.innerHTML = `<textarea data-save="${el.dataset.key}">${content}</textarea>`;
+            } else if(el.tagName === 'H1' || el.tagName === 'H2'){
+                el.innerHTML = `<input type='text' data-save='${el.dataset.key}' value='${content}'>`;
+            }
+        });
+        attachSaveListeners();
+        alert('Creator Mode Enabled!');
+    } else {
+        alert('Incorrect code');
+    }
+    input.value = '';
+}
+
+function attachSaveListeners(){
+    document.querySelectorAll('input[data-save], textarea[data-save]').forEach(el => {
+        el.addEventListener('input', () => {
+            localStorage.setItem(el.dataset.save, el.value);
+        });
+    });
+}
+
+window.addEventListener('load', () => {
+    document.querySelectorAll('[data-key]').forEach(el => {
+        const saved = localStorage.getItem(el.dataset.key);
+        if(saved){
+            if(el.tagName === 'P' || el.tagName === 'DIV') el.innerText = saved;
+            else if(el.tagName === 'H1' || el.tagName === 'H2') el.innerText = saved;
+        }
+    });
+});
+</script>
+
+</body>
+</html>
